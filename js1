@@ -1,0 +1,25 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './CalendarPage.css';
+
+const CalendarPage = () => {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  return (
+    <div className="calendar-page">
+      <h1>Select a Month</h1>
+      <div className="months-grid">
+        {months.map((month, index) => (
+          <Link key={index} to={`/month/${month}`} className="month-link">
+            {month}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default CalendarPage;
