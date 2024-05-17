@@ -1,0 +1,88 @@
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import './MonthDetailPage.css';
+
+const MonthDetailPage = () => {
+  const { month } = useParams();
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [formData, setFormData] = useState({ name: '', age: '', whatsappNumber: '' });
+
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    // Optionally, fetch users from a backend or local storage here
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newUser = { ...formData, date: selectedDate };
+    setUsers([...users, newUser]);
+    setFormData({ name: '', age: '', whatsappNumber: '' });
+  };
+
+  return (
+    <div className="month-detail-page">
+      <div className="left-side">
+        <h2>{month}</h2>
+        <div className="dates-grid">
+          {[...Array(31).keys()].map(day => (
+            <div
+              key={day}
+              className="date-box"
+              onClick={() => handleDateClick(day + 1)}
+            >
+              {day + 1}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="right-side">
+        {selectedDate && (
+          <>
+            <h3>Details for {month} {selectedDate}</h3>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Name"
+                required
+              />
+              <input
+                type="number"
+                name="age"
+                value={formData.age}
+                onChange={handleInputChange}
+                placeholder="Age"
+                required
+              />
+              <input
+                type="text"
+                name="whatsappNumber"
+                value={formData.whatsappNumber}
+                onChange={handleInputChange}
+                placeholder="WhatsApp Number"
+                required
+              />
+              <button type="submit">Add User</button>
+            </form>
+            <ul>
+              {users
+                .filter(user => user.date === selectedDate)
+                .map((user, index) => (
+                  <li key={index}>{user.name} - {user.age} - {user.whatsappNumber}</li>
+                ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default MonthDetailPage;
